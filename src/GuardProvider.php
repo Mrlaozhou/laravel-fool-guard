@@ -39,7 +39,7 @@ class GuardProvider implements ProviderContract
     {
         if( is_null($token) )  return false;
         /** @var \Mrlaozhou\Guard\Token|null instance */
-        $this->instance = $instance = $this->eloquent->newQuery()->find($token);
+        $this->instance = $instance = $this->getNewInstance()->newQuery()->find($token);
         return ( !is_null($instance) && $instance->exists && $this->verifyExpiredAt() ) ? $this->retrieveUserId() : false;
     }
 
@@ -50,11 +50,14 @@ class GuardProvider implements ProviderContract
      */
     public function buildByUser(Authenticatable $user)
     {
-        $this->eloquent->fill([
+        $instance       =   $this->getNewInstance();
+        $instance->fill([
             'token'     =>  $token = Hash::make($user->getAuthIdentifier()),
             'user_id'   =>  $user->getAuthIdentifier(),
             'expired_at'=>  now()->addSeconds(config('fool-guard.expire', 3600)),
         ])->save();
+
+        $this->instance = $instance->refresh();
 
         return $token;
     }
@@ -93,6 +96,14 @@ class GuardProvider implements ProviderContract
     public function getTokenInstance()
     {
         return $this->instance;
+    }
+
+    /**
+     * @return \Mrlaozhou\Guard\Token
+     */
+    public function getNewInstance()
+    {
+        return clone $this->eloquent;
     }
 
     /**

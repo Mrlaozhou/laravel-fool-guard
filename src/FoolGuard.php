@@ -115,8 +115,9 @@ class FoolGuard implements \Illuminate\Contracts\Auth\Guard, StatefulGuard
      */
     public function login(Authenticatable $user, $remember = false)
     {
+        $token = $this->getTokenProvider()->buildByUser($user);
         $this->setUser($user);
-        return $this->getTokenProvider()->buildByUser($user);
+        return $token;
     }
 
     /**

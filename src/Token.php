@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Token extends Model
 {
+    public $incrementing        =   false;
+
     protected $primaryKey       =   'token';
 
     protected $keyType          =   'string';
