@@ -101,7 +101,7 @@ class FoolGuard implements \Illuminate\Contracts\Auth\Guard, StatefulGuard
         //  根据整数获取用户
         $this->lastAttempted  =   $user   =   $this->getProvider()->retrieveByCredentials($credentials);
         //  密码验证
-        if( !$user && $this->getProvider()->validateCredentials($user, $credentials) ) {
+        if( $user && $this->getProvider()->validateCredentials($user, $credentials) ) {
             return $this->login($user);
         }
         return false;
