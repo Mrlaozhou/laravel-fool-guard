@@ -39,20 +39,25 @@ class GuardProvider implements ProviderContract
     {
         if( is_null($token) )  return false;
         /** @var \Mrlaozhou\Guard\Token|null instance */
-        $this->instance = $instance = $this->getNewInstance()->newQuery()->find($token);
+        $this->instance = $instance = $this->getNewInstance()->newQuery()->where('guard', RequestHelper::guardName())->find($token);
         return ( !is_null($instance) && $instance->exists && $this->verifyExpiredAt() ) ? $this->retrieveUserId() : false;
     }
 
     /**
-     * @param \Illuminate\Contracts\Auth\Authenticatable $user
+     * @param \Illuminate\Contracts\Auth\Authenticatable|\Mrlaozhou\Guard\FoolGuardAdapter $user
      *
      * @return string
+     * @throws \Exception
      */
     public function buildByUser(Authenticatable $user)
     {
+        if( ! method_exists($user, 'getFoolGuardName') ) {
+            throw new \Exception("守卫 Model 必须引入 trait[\Mrlaozhou\Guard\FoolGuardAdapter]");
+        }
         $instance       =   $this->getNewInstance();
         $instance->fill([
             'token'     =>  $token = Hash::make($user->getAuthIdentifier()),
+            'guard'     =>  $user->getFoolGuardName(),
             'user_id'   =>  $user->getAuthIdentifier(),
             'expired_at'=>  now()->addSeconds(config('fool-guard.expire', 3600)),
         ])->save();
