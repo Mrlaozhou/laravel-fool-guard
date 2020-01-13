@@ -1,7 +1,7 @@
 <?php
 namespace Mrlaozhou\Guard;
 
-trait FoolGuardAdapter
+interface FoolGuardAdapter
 {
 
     /**
@@ -9,8 +9,5 @@ trait FoolGuardAdapter
      *
      * @return string
      */
-    public function getFoolGuardName()
-    {
-        return auth()->getDefaultDriver();
-    }
+    public function getFoolGuardName();
 }

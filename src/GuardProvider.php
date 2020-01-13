@@ -52,7 +52,7 @@ class GuardProvider implements ProviderContract
     public function buildByUser(Authenticatable $user)
     {
         if( ! method_exists($user, 'getFoolGuardName') ) {
-            throw new \Exception("守卫 Model 必须引入 trait[\Mrlaozhou\Guard\FoolGuardAdapter]");
+            throw new \Exception("守卫 Model 必须引入 interface[\Mrlaozhou\Guard\FoolGuardAdapter]");
         }
         $instance       =   $this->getNewInstance();
         $instance->fill([
