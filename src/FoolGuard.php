@@ -188,8 +188,8 @@ class FoolGuard implements \Illuminate\Contracts\Auth\Guard, StatefulGuard
 
     protected function getTokenFromRequest()
     {
-        return ($token = $this->request->header($tokenParamName = config('fool-guard.token_param_name')))
+        return ($token = $this->request->header($tokenParamName = config('fool-guard.token_header_name')))
             ?   $token
-            :   $this->request->get($token);
+            :   $this->request->get(config('fool-guard.token_param_name'));
     }
 }

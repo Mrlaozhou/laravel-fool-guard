@@ -2,9 +2,11 @@
 
 return [
 
-    //  token参数名
-    'token_param_name'      =>  'X-CSRF-TOKEN',
+    //  token 在header参数名
+    'token_header_name'     =>  'X-CSRF-TOKEN',
 
+    //  token 在param参数名
+    'token_param_name'      =>  '_token',
 
     //  有效时间
     'expire'                =>  3600,
